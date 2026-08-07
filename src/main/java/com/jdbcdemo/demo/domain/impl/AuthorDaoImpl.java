@@ -18,4 +18,13 @@ public class AuthorDaoImpl implements AuthorDao {
                 author.getAge()
                 );
     }
+
+    @Override
+    public void update(Long authorId, Author author) {
+        jdbcTemplate.update("UPDATE books SET id=?, name=?, age=? WHERE id=?",
+                author.getId(),
+                author.getName(),
+                author.getAge(),
+                authorId);
+    }
 }

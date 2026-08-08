@@ -53,4 +53,15 @@ public class BookDaoImplTests {
                 eq(book.getAuthorId()),
                 eq(book.getIsbn()));
     }
+
+    @Test
+    public void testThatDeleteBookCreatesCorrectSql(){
+
+        Book book = TestUtils.createTestBookA();
+        underTest.create( book);
+
+        underTest.delete(book.getIsbn());
+
+        verify(jdbcTemplate).update(eq("DELETE FROM books WHERE isbn=?"),eq(book.getIsbn()));
+    }
 }

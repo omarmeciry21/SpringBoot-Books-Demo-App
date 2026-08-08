@@ -4,6 +4,9 @@ import com.jdbcdemo.demo.domain.Author;
 import com.jdbcdemo.demo.domain.Book;
 
 public class TestUtils {
+
+    private TestUtils(){}
+
     public static Author createTestAuthorA(){
         return Author
                 .builder()

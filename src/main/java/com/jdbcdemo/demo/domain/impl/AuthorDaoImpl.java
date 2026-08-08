@@ -5,12 +5,14 @@ import com.jdbcdemo.demo.domain.AuthorDao;
 import org.mockito.ArgumentMatchers;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class AuthorDaoImpl implements AuthorDao {
     private final JdbcTemplate jdbcTemplate;
     public AuthorDaoImpl(final JdbcTemplate jdbcTemplate){

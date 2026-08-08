@@ -27,4 +27,9 @@ public class AuthorDaoImpl implements AuthorDao {
                 author.getAge(),
                 authorId);
     }
+
+    @Override
+    public void delete(Long authorId) {
+        jdbcTemplate.update("DELETE FROM authors WHERE id=?", authorId);
+    }
 }

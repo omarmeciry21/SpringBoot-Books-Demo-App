@@ -7,10 +7,13 @@ import com.jdbcdemo.demo.domain.impl.AuthorDaoImpl;
 import com.jdbcdemo.demo.domain.impl.BookDaoImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -63,5 +66,19 @@ public class BookDaoImplTests {
         underTest.delete(book.getIsbn());
 
         verify(jdbcTemplate).update(eq("DELETE FROM books WHERE isbn=?"),eq(book.getIsbn()));
+    }
+
+    @Test
+    public void testThatReadBookCreatesCorrectSql(){
+        Book bookB = TestUtils.createTestBookB();
+        underTest.create(bookB);
+
+        Optional<Book> bookData = underTest.find(bookB.getIsbn());
+
+        verify(jdbcTemplate).query(
+                eq("SELECT isbn, title, author_id FROM books WHERE isbn = ? LIMIT 1"),
+                ArgumentMatchers.<BookDaoImpl.BookRowMapper>any(),
+                eq(bookB.getIsbn())
+        );
     }
 }

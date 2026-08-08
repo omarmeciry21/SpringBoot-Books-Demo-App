@@ -5,10 +5,13 @@ import com.jdbcdemo.demo.domain.Author;
 import com.jdbcdemo.demo.domain.impl.AuthorDaoImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -60,5 +63,23 @@ public class AuthorDaoImplTests {
         underTest.delete(author.getId());
 
         verify(jdbcTemplate).update(eq("DELETE FROM authors WHERE id=?"), eq(author.getId()));
+    }
+
+    @Test
+    public void testThatReadOneAuthorCreatesCorrectSql(){
+        Author authorA = TestUtils.createTestAuthorA();
+        Author authorB = TestUtils.createTestAuthorB();
+        Author authorC = TestUtils.createTestAuthorC();
+
+        underTest.create(authorA);
+        underTest.create(authorB);
+        underTest.create(authorC);
+
+        Optional<Author> authorData = underTest.find(authorB.getId());
+
+        verify(jdbcTemplate).query(eq("SELECT id, name, age FROM authors WHERE id = ? LIMIT 1"),
+                ArgumentMatchers.<AuthorDaoImpl.AuthorRowMapper>any(),
+                eq(authorB.getId()));
+
     }
 }
